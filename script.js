@@ -156,11 +156,11 @@ mainAudio.addEventListener("ended", () => {
             playMusic();
             break;
         case "shuffle":
-            let randIndex = Math.floor((Math.random() * allMusic.length) + 1);
+            let randomIndex = Math.floor((Math.random() * allMusic.length) + 1);
             do {
-                randIndex = Math.floor((Math.random() * allMusic.length) + 1);
+                randomIndex = Math.floor((Math.random() * allMusic.length) + 1);
             } while (musicIndex == randIndex);
-            musicIndex = randIndex;
+            musicIndex = randomIndex;
             loadMusic(musicIndex);
             playMusic();
             playingSong();
