@@ -312,7 +312,6 @@ function toggleFavorite(element) {
         element.innerText = "Add to Favorite";
         ulTag.appendChild(liElement);
         starIcon.style.display = "none";
-
     } else {
         // Add to favorites
         favoriteSongs[songId] = true;
@@ -320,8 +319,40 @@ function toggleFavorite(element) {
         ulTag.prepend(liElement);
         starIcon.style.display = "block";
     }
-    // update local storage
+
+    // Sort music list by favorite status and then by musicIndex
+    const allLiTag = Array.from(ulTag.querySelectorAll("li"));
+    allLiTag.sort((a, b) => {
+        const indexA = parseInt(a.getAttribute("li-index"));
+        const indexB = parseInt(b.getAttribute("li-index"));
+        const favoriteA = favoriteSongs[a.getAttribute("li-index")] ? 1 : 0;
+        const favoriteB = favoriteSongs[b.getAttribute("li-index")] ? 1 : 0;
+
+        if (favoriteA !== favoriteB) {
+            return favoriteB - favoriteA;
+        } else {
+            return indexA - indexB;
+        }
+    });
+
+    ulTag.innerHTML = "";
+    allLiTag.forEach(li => ulTag.appendChild(li));
+
+    // Update local storage and display favorite songs
     localStorage.setItem("favoriteSongs", JSON.stringify(favoriteSongs));
+}
+
+function addToFavorites() {
+    const currentLi = document.querySelector(`li[li-index="${musicIndex}"]`);
+    const favoriteButton = currentLi.querySelector(".favorite-btn");
+    toggleFavorite(favoriteButton);
+
+    // change text of list for add and remove from favorite
+    if (isFavorite) {
+        favoriteButton.innerText = "Add to Favorite";
+    } else {
+        favoriteButton.innerText = "Remove from Favorite";
+    }
 }
 
 const favoriteButtons = document.querySelectorAll(".favorite-btn");
