@@ -10,13 +10,13 @@ const progressArea = document.querySelector(".progress-area");
 const progressBar = document.querySelector(".progress-bar");
 const recent_volume = document.querySelector('#volume');
 const volume_show = document.querySelector('#volume_show');
-const wave = document.getElementById('wave');
 const repeatBtn = document.querySelector("#repeat-plist");
 const ulTag = document.querySelector(".music-list");
 
 let musicIndex = Math.floor((Math.random() * allMusic.length) + 1);
 isMusicPaused = true;
 let favoriteSongs = {};
+let isDragging = false;
 
 window.addEventListener("load", () => {
     loadPlayerState();
@@ -108,7 +108,6 @@ function playMusic() {
     playPauseBtn.classList.add("paused");
     playPauseBtn.querySelector("span").innerText = "pause";
     mainAudio.play();
-    wave.classList.add('loader');
 }
 
 //pause music function
@@ -116,7 +115,6 @@ function pauseMusic() {
     playPauseBtn.classList.remove("paused");
     playPauseBtn.querySelector("span").innerText = "play_arrow";
     mainAudio.pause();
-    wave.classList.remove('loader');
 }
 
 //prev music function
@@ -171,15 +169,35 @@ mainAudio.addEventListener("timeupdate", (e) => {
     musicCurrentTime.innerText = `${currentMin}:${currentSec}`;
 });
 
-// update playing song currentTime on according to the progress bar width
-progressArea.addEventListener("click", (e) => {
-    let progressWidth = progressArea.clientWidth;
-    let clickedOffsetX = e.offsetX;
-    let songDuration = mainAudio.duration;
-    mainAudio.currentTime = (clickedOffsetX / progressWidth) * songDuration;
-    playMusic();
-    playingSong();
+// scrolling progressBar with mouse scroll
+function updateProgressBar(event) {
+    if (isDragging) {
+        const rect = progressArea.getBoundingClientRect();
+        const mouseX = event.clientX - rect.left;
+        const progressWidth = (mouseX / progressArea.clientWidth) * 100;
+
+        progressBar.style.width = `${progressWidth}%`;
+
+        const songDuration = mainAudio.duration;
+        mainAudio.currentTime = (progressWidth / 100) * songDuration;
+    }
+}
+
+progressArea.addEventListener("mousedown", (event) => {
+    isDragging = true;
+    updateProgressBar(event);
 });
+
+progressArea.addEventListener("mousemove", (event) => {
+    if (isDragging) {
+        updateProgressBar(event);
+    }
+});
+
+document.addEventListener("mouseup", () => {
+    isDragging = false;
+});
+isDragging = false;
 
 //change loop, shuffle, repeat icon onclick
 repeatBtn.addEventListener("click", () => {
@@ -346,13 +364,6 @@ function addToFavorites() {
     const currentLi = document.querySelector(`li[li-index="${musicIndex}"]`);
     const favoriteButton = currentLi.querySelector(".favorite-btn");
     toggleFavorite(favoriteButton);
-
-    // change text of list for add and remove from favorite
-    if (isFavorite) {
-        favoriteButton.innerText = "Add to Favorite";
-    } else {
-        favoriteButton.innerText = "Remove from Favorite";
-    }
 }
 
 const favoriteButtons = document.querySelectorAll(".favorite-btn");
@@ -362,20 +373,51 @@ favoriteButtons.forEach(button => {
     });
 });
 
-function toggleOptions() {
-    var optionsBox = document.getElementById('options-box');
-    if (optionsBox.style.display === 'none') {
-        optionsBox.style.display = 'flex';
-    } else {
-        optionsBox.style.display = 'none';
-    }
+// Get references to the elements
+const sideOptionsBox = document.getElementById('side-options-box');
+const topOptionsBox = document.getElementById('top-options-box');
+const sideOptionsButton = document.getElementById('side-options');
+const topOptionsButton = document.getElementById('top-options');
+
+function toggleSideOptions() {
+    sideOptionsBox.classList.toggle('show');
 }
 
-// Close options box if clicked outside
+function toggleTopOptions() {
+    topOptionsBox.classList.toggle('show');
+}
+
+sideOptionsButton.addEventListener('click', function (event) {
+    event.stopPropagation(); 
+    toggleSideOptions();
+});
+
+topOptionsButton.addEventListener('click', function (event) {
+    event.stopPropagation(); 
+    toggleTopOptions();
+});
+
 document.addEventListener('click', function (event) {
-    var optionsBox = document.getElementById('options-box');
-    var optionsIcon = document.getElementById('options');
-    if (!optionsBox.contains(event.target) && event.target !== optionsIcon) {
-        optionsBox.style.display = 'none';
+    if (!sideOptionsButton.contains(event.target) && !sideOptionsBox.contains(event.target)) {
+        sideOptionsBox.classList.remove('show');
+    }
+
+    if (!topOptionsButton.contains(event.target) && !topOptionsBox.contains(event.target)) {
+        topOptionsBox.classList.remove('show');
     }
 });
+
+// Function to toggle the volume control input visibility
+function toggleVolumeControl() {
+    const volumeControl = document.getElementById('volume');
+    if (volumeControl.style.display === 'block') {
+        volumeControl.style.display = 'none';
+    } else {
+        volumeControl.style.display = 'block';
+        volumeControl.focus();
+    }
+}
+function hideVolumeControl() {
+    const volumeControl = document.getElementById('volume');
+    volumeControl.style.display = 'none';
+}

@@ -26,12 +26,15 @@ body {
 
 .wrapper {
     width: 100%;
-    padding: 25px;
+    padding-bottom: 25px;
     overflow: hidden;
     position: relative;
     background: var(--white);
     border-bottom: 3px solid #f3f4f6;
 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .wrapper i {
@@ -64,10 +67,10 @@ body {
 }
 
 .top-bar {
-    padding-bottom: 10px;
+    width: 100%;
+    padding: 20px;
     margin-bottom: 15px;
     border-bottom: 2px solid #EAEAEA;
-
 }
 
 .top-bar i {
@@ -127,7 +130,7 @@ img {
 }
 
 .song-details>p {
-    color: rgba(0, 0, 0, 0.858);
+    color: #000000db;
 }
 
 .song-details .name {
@@ -146,7 +149,7 @@ img {
 
 .progress-area {
     height: 6px;
-    width: 100%;
+    width: 98%;
     border-radius: 50px;
     background: #f0f0f0;
     cursor: pointer;
@@ -183,7 +186,6 @@ img {
 
 .progress-area .song-timer {
     margin-top: 2px;
-
 }
 
 .song-timer span {
@@ -192,11 +194,12 @@ img {
 }
 
 .volume {
-    margin: 30px 0 15px 0;
     display: flex;
     justify-content: center;
     align-items: center;
-    color: rgb(87, 86, 86)
+    color: #575656;
+    transform: rotate(270deg);
+    position: relative;
 }
 
 .volume p {
@@ -207,6 +210,15 @@ img {
     cursor: pointer;
     padding: 8px 12px;
     background: #ffffff;
+    transform: rotate(90deg);
+}
+
+.volume-control {
+    position: absolute;
+    display: none;
+    z-index: 1000;
+    top: 14px;
+    left: 33px;
 }
 
 .volume i:hover {
@@ -214,18 +226,19 @@ img {
 }
 
 .volume #volume_show {
-    padding: 8px 12px;
-    margin: 0 5px 0 0;
-    background: rgba(122, 121, 121, 0.1);
+    display: none;
 }
 
 .volume input {
-    width: 60%;
     outline: none;
     border: none;
-    height: 3px;
+    height: 5px;
     margin: 0 5px;
     background: rgb(196, 118, 147);
+}
+
+.volume input:focus {
+    display: block;
 }
 
 input[type="range"]::-webkit-progress-value {
@@ -281,7 +294,7 @@ div .expand-arrow,
     padding: 10px;
     display: flex;
     gap: 30px;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
 }
 
@@ -290,6 +303,13 @@ div .expand-arrow,
     display: flex;
     align-items: center;
     gap: 40px;
+}
+
+.music-control-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
 }
 
 li {
@@ -496,7 +516,16 @@ li {
     flex-direction: column;
 }
 
+.side-options-box {
+    top: -85px;
+    right: 16px;
+}
+
 .options-box li {
     border: none;
     cursor: pointer;
+}
+
+.options-box.show {
+    display: block;
 }

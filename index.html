@@ -30,9 +30,9 @@
                         arrow_forward_ios
                     </span>
                     <i id="repeat-plist" class="material-icons" title="Playlist looped">repeat</i>
-                    <i id="options" class="material-icons" onclick="toggleOptions()">more_horiz</i>
+                    <i id="top-options" class="material-icons">more_horiz</i>
                     <!-- options -->
-                    <div id="options-box" class="options-box">
+                    <div id="top-options-box" class="options-box">
                         <ul>
                             <li>Save to your Library</li>
                             <li>Add to Playlist</li>
@@ -64,44 +64,42 @@
                 </div>
             </div>
 
-            <div class="volume">
-                <p id="volume_show">42</p>
-                <i class="fa fa-volume-up" aria-hidden="true" onclick="mute_sound()" id="volume_icon"></i>
-                <input type="range" min="0" max="100" value="42" onchange="volume_change()" id="volume">
-            </div>
-
             <div class=" sticky-music-control controls">
-                <div class="music-control-side-buttons">
-                    <span class="material-symbols-outlined expand-arrow">
-                        expand_less
-                    </span>
+                <div class="volume music-control-side-buttons">
+                    <p id="volume_show">42</p>
+                    <i class="fa fa-volume-up" aria-hidden="true" onclick="toggleVolumeControl()" id="volume_icon"></i>
+                    <input type="range" min="0" max="100" value="42" onchange="volume_change()"
+                        onblur="hideVolumeControl()" id="volume" class="volume-control">
+                </div>
+
+                <div class="music-control-center">
+
                     <span id="prev" class="material-symbols-outlined" onclick="prevMusic()">
                         skip_previous
                     </span>
-                </div>
-                <div class="play-pause">
-                    <span class="material-symbols-outlined">
-                        play_arrow
+
+                    <div class="play-pause">
+                        <span class="material-symbols-outlined">
+                            play_arrow
+                        </span>
+                    </div>
+
+                    <span id="next" class="material-symbols-outlined" onclick="nextMusic()">
+                        skip_next
                     </span>
                 </div>
                 <div class="music-control-side-buttons">
-                    <span id="next" class="material-symbols-outlined">
-                        skip_next
-                    </span>
-                    <i class="material-icons">more_horiz</i>
+                    <i id="side-options" class="material-icons">more_horiz</i>
+                    <!-- options -->
+                    <div id="side-options-box" class="options-box side-options-box">
+                        <ul>
+                            <li>Save to your Library</li>
+                            <li>Add to Playlist</li>
+                            <li>Share</li>
+                            <li onclick="addToFavorites()">Add To Favorite</li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
-
-            <div id="wave">
-                <span class="stroke"></span>
-                <span class="stroke"></span>
-                <span class="stroke"></span>
-                <span class="stroke"></span>
-                <span class="stroke"></span>
-                <span class="stroke"></span>
-                <span class="stroke"></span>
-                <span class="stroke"></span>
-                <span class="stroke"></span>
             </div>
         </div>
 
